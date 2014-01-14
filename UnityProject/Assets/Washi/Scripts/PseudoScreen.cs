@@ -16,11 +16,11 @@ public class PseudoScreen : MonoBehaviour
 		get{return height;}
 	}
 
-	public bool touchEnable = true;
-	public bool TouchEnable
+	private bool isActive = true;
+	public bool IsActive
 	{
-		get;
-		set;
+		get{return this.isActive;}
+		private set{this.isActive = value;}
 	}
 
 	// Use this for initialization
@@ -33,7 +33,7 @@ public class PseudoScreen : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if(!this.TouchEnable)
+		if(!this.IsActive)
 		{
 			return;
 		}
@@ -41,7 +41,6 @@ public class PseudoScreen : MonoBehaviour
 		if(Input.GetMouseButtonDown(0))
 		{
 		}
-		int touchCount = 0;
 		foreach(Touch touch in Input.touches)
 		{
 			switch(touch.phase)
