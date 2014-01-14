@@ -4,23 +4,43 @@ using System.Collections;
 [AddComponentMenu("Scripts/Washi/PseudoScreen")]
 public class PseudoScreen : MonoBehaviour
 {
-	int width;
-	public int Width
+	int width{get;set;}
+	int height{get;set;}
+
+	public bool _isActive = true;
+	public bool isActive
 	{
-		get{return width;}
+		get{return this._isActive;}
+		private set{this._isActive = value;}
 	}
 
-	int height;
-	public int Height
+	bool prevInput{get;set;}
+	Vector2 prevMousePosition{get; set;}
+	Vector2 curMousePosition{get;set;}
+
+	public float _sensibility = 1.0F;
+	public float sensibility
 	{
-		get{return height;}
+		get{return this._sensibility;}
+		set{this._sensibility = value;}
 	}
 
-	private bool isActive = true;
-	public bool IsActive
+	Vector2 startPoint{get; set;}
+
+	private enum TouchState
 	{
-		get{return this.isActive;}
-		private set{this.isActive = value;}
+		None,
+		Began,
+		Ended,
+		Canceled,
+		Touching
+	}
+	TouchState touchState{get;set;}
+
+	public int touchCount
+	{
+		get;
+		private set;
 	}
 
 	// Use this for initialization
@@ -28,20 +48,96 @@ public class PseudoScreen : MonoBehaviour
 	{
 		this.width  = Screen.width;
 		this.height = Screen.height;
+		this.touchState = TouchState.None;
+		this.touchCount = 0;
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-		if(!this.IsActive)
+		if(!this.isActive)
 		{
 			return;
 		}
 
-		if(Input.GetMouseButtonDown(0))
+		// Change state.
+		switch(this.touchState)
 		{
+		case TouchState.None:
+			// No change.
+			break;
+		case TouchState.Began:
+			this.touchState = TouchState.Touching;
+			break;
+		case TouchState.Touching:
+			// No change.
+			break;
+		case TouchState.Ended:
+			this.touchState = TouchState.None;
+			--this.touchCount;
+			break;
+		case TouchState.Canceled:
+			this.touchState = TouchState.None;
+			--this.touchCount;
+			break;
+		default:
+			break;
 		}
-		foreach(Touch touch in Input.touches)
+
+		this.prevMousePosition = this.curMousePosition;
+		this.curMousePosition  = Input.mousePosition;
+		
+		// Handle state
+		if(this.touchState == TouchState.None)
+		{
+			if(Input.GetMouseButtonDown(0))
+			{
+				Debug.Log("Touch began.");
+				this.startPoint  = this.curMousePosition;
+				this.touchState  = TouchState.Began;
+				++this.touchCount;
+
+				// TODO: Notify listeners of the event.
+			}
+		}
+		else if(this.touchState == TouchState.Touching)
+		{
+			if(Input.GetMouseButtonUp(0))
+			{
+				Debug.Log("Touch ended.");
+				this.touchState = TouchState.Ended;
+
+				// TODO: Notify listeners of the event.
+			}
+			else if(Input.GetMouseButton(0))
+			{
+				if(Input.GetMouseButtonDown(1))
+				{
+					Debug.Log("Touch canceled.");
+					this.touchState = TouchState.Canceled;
+
+					// TODO: Notify listeners of the event.
+				}
+				else
+				{
+					this.touchState = TouchState.Touching;
+					Vector2 deltaMove = this.prevMousePosition - this.curMousePosition;
+					if(deltaMove.sqrMagnitude > this.sensibility)
+					{
+						Debug.Log("Touch moved.");
+
+						// TODO: Notify listeners of the event.
+					}
+					else
+					{
+						// Debug.Log("Touch stationary.");
+					}
+				}
+			}
+		}
+
+		// Go through this path only on mobile devices.
+		foreach(UnityEngine.Touch touch in Input.touches)
 		{
 			switch(touch.phase)
 			{
