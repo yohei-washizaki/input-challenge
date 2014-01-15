@@ -14,19 +14,41 @@ public class PseudoScreen : MonoBehaviour
 		private set{this._isActive = value;}
 	}
 
-	bool prevInput{get;set;}
-	Vector2 prevMousePoint{get; set;}
-	Vector2 curMousePoint{get;set;}
+	/// <summary>
+	/// Gets or sets the previous touch point.
+	/// </summary>
+	/// <value>The previous touch point.</value>
+	Vector2 previousTouchPoint{get; set;}
+
+	/// <summary>
+	/// Gets the last touch point.
+	/// </summary>
+	/// <value>The last touch point.</value>
+	public Vector2 lastTouchPoint
+	{
+		get;
+		private set;
+	}
 
 	public float _sensibility = 1.0F;
+
+	/// <summary>
+	/// Gets or sets the sensibility.
+	/// </summary>
+	/// <value>The sensibility.</value>
 	public float sensibility
 	{
 		get{return this._sensibility;}
 		set{this._sensibility = value;}
 	}
 
-	Vector2 startPoint{get; set;}
+	/// <summary>
+	/// Gets or sets the first touch point.
+	/// </summary>
+	/// <value>The first touch point.</value>
+	public Vector2 firstTouchPoint{get; set;}
 
+	// The internal state of touch sequence.
 	private enum TouchState
 	{
 		None,
@@ -35,24 +57,46 @@ public class PseudoScreen : MonoBehaviour
 		Canceled,
 		Touching
 	}
+	/// <summary>
+	/// Gets or sets the state of the touch.
+	/// </summary>
+	/// <value>The state of the touch.</value>
 	TouchState touchState{get;set;}
 
+	/// <summary>
+	/// Gets the touch phase.
+	/// </summary>
+	/// <value>The touch phase.</value>
+	public TouchPhase touchPhase
+	{
+		get;
+		private set;
+	}
+
+	/// <summary>
+	/// Gets the touch count.
+	/// </summary>
+	/// <value>The touch count.</value>
 	public int touchCount
 	{
 		get;
 		private set;
 	}
 
-	// Use this for initialization
+	/// <summary>
+	/// Start this instance.
+	/// </summary>
 	void Start ()
 	{
-		this.width  = Screen.width;
-		this.height = Screen.height;
+		this.width      = Screen.width;
+		this.height     = Screen.height;
 		this.touchState = TouchState.None;
 		this.touchCount = 0;
 	}
 
-	// Update is called once per frame
+	/// <summary>
+	/// Update this instance.
+	/// </summary>
 	void Update ()
 	{
 		if(!this.isActive)
@@ -84,8 +128,8 @@ public class PseudoScreen : MonoBehaviour
 			break;
 		}
 
-		this.prevMousePoint = this.curMousePoint;
-		this.curMousePoint  = Input.mousePosition;
+		this.previousTouchPoint = this.lastTouchPoint;
+		this.lastTouchPoint     = Input.mousePosition;
 		
 		// Handle state
 		if(this.touchState == TouchState.None)
@@ -93,8 +137,9 @@ public class PseudoScreen : MonoBehaviour
 			if(Input.GetMouseButtonDown(0))
 			{
 				Debug.Log("Touch began.");
-				this.startPoint  = this.curMousePoint;
-				this.touchState  = TouchState.Began;
+				this.firstTouchPoint  = this.lastTouchPoint;
+				this.touchState       = TouchState.Began;
+				this.touchPhase       = TouchPhase.Began;
 				++this.touchCount;
 
 				// TODO: Notify listeners of the event.
@@ -106,6 +151,7 @@ public class PseudoScreen : MonoBehaviour
 			{
 				Debug.Log("Touch ended.");
 				this.touchState = TouchState.Ended;
+				this.touchPhase = TouchPhase.Ended;
 
 				// TODO: Notify listeners of the event.
 			}
@@ -115,21 +161,24 @@ public class PseudoScreen : MonoBehaviour
 				{
 					Debug.Log("Touch canceled.");
 					this.touchState = TouchState.Canceled;
+					this.touchPhase = TouchPhase.Canceled;
 
 					// TODO: Notify listeners of the event.
 				}
 				else
 				{
 					this.touchState = TouchState.Touching;
-					Vector2 deltaMove = this.prevMousePoint - this.curMousePoint;
+					Vector2 deltaMove = this.previousTouchPoint - this.lastTouchPoint;
 					if(deltaMove.sqrMagnitude > this.sensibility)
 					{
 						Debug.Log("Touch moved.");
+						this.touchPhase = TouchPhase.Moved;
 
 						// TODO: Notify listeners of the event.
 					}
 					else
 					{
+						this.touchPhase = TouchPhase.Stationary;
 						// Debug.Log("Touch stationary.");
 					}
 				}
