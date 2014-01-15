@@ -15,8 +15,8 @@ public class PseudoScreen : MonoBehaviour
 	}
 
 	bool prevInput{get;set;}
-	Vector2 prevMousePosition{get; set;}
-	Vector2 curMousePosition{get;set;}
+	Vector2 prevMousePoint{get; set;}
+	Vector2 curMousePoint{get;set;}
 
 	public float _sensibility = 1.0F;
 	public float sensibility
@@ -84,8 +84,8 @@ public class PseudoScreen : MonoBehaviour
 			break;
 		}
 
-		this.prevMousePosition = this.curMousePosition;
-		this.curMousePosition  = Input.mousePosition;
+		this.prevMousePoint = this.curMousePoint;
+		this.curMousePoint  = Input.mousePosition;
 		
 		// Handle state
 		if(this.touchState == TouchState.None)
@@ -93,7 +93,7 @@ public class PseudoScreen : MonoBehaviour
 			if(Input.GetMouseButtonDown(0))
 			{
 				Debug.Log("Touch began.");
-				this.startPoint  = this.curMousePosition;
+				this.startPoint  = this.curMousePoint;
 				this.touchState  = TouchState.Began;
 				++this.touchCount;
 
@@ -121,7 +121,7 @@ public class PseudoScreen : MonoBehaviour
 				else
 				{
 					this.touchState = TouchState.Touching;
-					Vector2 deltaMove = this.prevMousePosition - this.curMousePosition;
+					Vector2 deltaMove = this.prevMousePoint - this.curMousePoint;
 					if(deltaMove.sqrMagnitude > this.sensibility)
 					{
 						Debug.Log("Touch moved.");
