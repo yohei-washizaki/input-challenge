@@ -109,6 +109,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b8d647856fb7f084f866b16c7cb1678b, type: 2}
+      propertyPath: endWidth
+      value: .0500000007
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b8d647856fb7f084f866b16c7cb1678b, type: 2}
   m_RootGameObject: {fileID: 633305130}
@@ -267,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: .00100000005
   startWidth: .00999999978
-  endWidth: .00999999978
+  endWidth: .0500000007
 --- !u!4 &633305132
 Transform:
   m_ObjectHideFlags: 0
