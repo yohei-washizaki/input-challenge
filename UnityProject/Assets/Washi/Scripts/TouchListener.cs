@@ -63,7 +63,7 @@ public class TouchListener : MonoBehaviour
 				case TouchPhase.Began:
 				{
 					// Replace the linepoints container.
-					this.linePoints = new List<Vector3>();
+					this.linePoints.Clear();
 
 					Vector3 screenTouchPoint = this.screen.firstTouchPoint;
 					screenTouchPoint.z       = this.mainCamera.nearClipPlane;
