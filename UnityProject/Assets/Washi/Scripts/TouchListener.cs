@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// Touch listener.
 /// </summary>
 [RequireComponent(typeof(LineRenderer))]
+[AddComponentMenu("Scripts/Washi/TouchListener")]
 public class TouchListener : MonoBehaviour
 {
 	/// <summary>
