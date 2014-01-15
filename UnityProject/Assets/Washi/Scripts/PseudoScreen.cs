@@ -136,7 +136,6 @@ public class PseudoScreen : MonoBehaviour
 		{
 			if(Input.GetMouseButtonDown(0))
 			{
-				Debug.Log("Touch began.");
 				this.firstTouchPoint  = this.lastTouchPoint;
 				this.touchState       = TouchState.Began;
 				this.touchPhase       = TouchPhase.Began;
@@ -149,7 +148,6 @@ public class PseudoScreen : MonoBehaviour
 		{
 			if(Input.GetMouseButtonUp(0))
 			{
-				Debug.Log("Touch ended.");
 				this.touchState = TouchState.Ended;
 				this.touchPhase = TouchPhase.Ended;
 
@@ -159,7 +157,6 @@ public class PseudoScreen : MonoBehaviour
 			{
 				if(Input.GetMouseButtonDown(1))
 				{
-					Debug.Log("Touch canceled.");
 					this.touchState = TouchState.Canceled;
 					this.touchPhase = TouchPhase.Canceled;
 
@@ -171,7 +168,6 @@ public class PseudoScreen : MonoBehaviour
 					Vector2 deltaMove = this.previousTouchPoint - this.lastTouchPoint;
 					if(deltaMove.sqrMagnitude > this.sensibility)
 					{
-						Debug.Log("Touch moved.");
 						this.touchPhase = TouchPhase.Moved;
 
 						// TODO: Notify listeners of the event.
