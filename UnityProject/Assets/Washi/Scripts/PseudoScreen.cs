@@ -67,6 +67,9 @@ public class PseudoScreen : MonoBehaviour
 	/// Gets the touch phase.
 	/// </summary>
 	/// <value>The touch phase.</value>
+	/// <description>
+	/// The external state of touch sequence.
+	/// </description>
 	public TouchPhase touchPhase
 	{
 		get;
