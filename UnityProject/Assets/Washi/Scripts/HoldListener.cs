@@ -2,6 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(ParticleSystem))]
+[AddComponentMenu("Scripts/Washi/Hold Listener")]
 public class HoldListener : MonoBehaviour
 {
 	/// <summary>
