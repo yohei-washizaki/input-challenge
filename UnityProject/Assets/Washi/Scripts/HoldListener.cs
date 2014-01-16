@@ -11,14 +11,17 @@ public class HoldListener : MonoBehaviour
 	/// <value>The screen.</value>
 	PseudoScreen screen{get;set;}
 
-	public float distance;
+	/// <summary>
+	/// The distance from screen.
+	/// </summary>
+	public float distanceFromScreen;
 
 	// Use this for initialization
 	void Start ()
 	{
-		if(this.distance < Camera.main.nearClipPlane)
+		if(this.distanceFromScreen < Camera.main.nearClipPlane)
 		{
-			this.distance = Camera.main.nearClipPlane;
+			this.distanceFromScreen = Camera.main.nearClipPlane;
 		}
 
 		GameObject obj = GameObject.Find("PseudoScreen");
@@ -48,7 +51,7 @@ public class HoldListener : MonoBehaviour
 			case TouchPhase.Began:
 			{
 				Vector3 screenPoint = this.screen.firstTouchPoint;
-				screenPoint.z       = this.distance;
+				screenPoint.z       = this.distanceFromScreen;
 
 				Vector3 worldPoint  = Camera.main.ScreenToWorldPoint(screenPoint);
 				this.particleSystem.transform.position = worldPoint;
@@ -72,7 +75,7 @@ public class HoldListener : MonoBehaviour
 				else
 				{
 					Vector3 screenPoint = this.screen.lastTouchPoint;
-					screenPoint.z       = this.distance;
+					screenPoint.z       = this.distanceFromScreen;
 
 					Vector3 worldPoint  = Camera.main.ScreenToWorldPoint(screenPoint);
 					this.particleSystem.transform.position = worldPoint;
