@@ -36,6 +36,7 @@ public class TouchListener : MonoBehaviour
 	public float threshold  = 0.001F;
 	public float startWidth = 0.01F;
 	public float endWidth   = 0.01F;
+	public float distanceFromScreen = 1.0F;
 
 	// Use this for initialization
 	void Start ()
@@ -66,7 +67,7 @@ public class TouchListener : MonoBehaviour
 					this.linePoints.Clear();
 
 					Vector3 screenTouchPoint = this.screen.firstTouchPoint;
-					screenTouchPoint.z       = this.mainCamera.nearClipPlane;
+					screenTouchPoint.z       = this.distanceFromScreen;
 
 					// Convert screen coord to world coord.
 					Vector3 worldTouchPoint  = this.mainCamera.ScreenToWorldPoint(screenTouchPoint);
@@ -78,7 +79,7 @@ public class TouchListener : MonoBehaviour
 				case TouchPhase.Moved:
 				{
 					Vector3 screenTouchPoint = this.screen.lastTouchPoint;
-					screenTouchPoint.z       = this.mainCamera.nearClipPlane;
+					screenTouchPoint.z       = this.distanceFromScreen;
 
 					Vector3 worldTouchPoint  = this.mainCamera.ScreenToWorldPoint(screenTouchPoint);
 					Vector3 lastTouchPoint   = this.linePoints[this.linePoints.Count - 1];
