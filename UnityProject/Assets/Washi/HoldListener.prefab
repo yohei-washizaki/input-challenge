@@ -40,7 +40,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6311aa57910eee1449772a6ab343283a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
+  distanceFromScreen: 10
+  thresholdSec: .300000012
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
