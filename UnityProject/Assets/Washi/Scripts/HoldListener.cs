@@ -16,9 +16,18 @@ public class HoldListener : MonoBehaviour
 	/// </summary>
 	public float distanceFromScreen;
 
+	/// <summary>
+	/// The threshold sec.
+	/// </summary>
+	public float thresholdSec = 1.0F;
+
+	private float timer {get; set;}
+
 	// Use this for initialization
 	void Start ()
 	{
+		this.timer = 0;
+
 		if(this.distanceFromScreen < Camera.main.nearClipPlane)
 		{
 			this.distanceFromScreen = Camera.main.nearClipPlane;
@@ -50,36 +59,37 @@ public class HoldListener : MonoBehaviour
 			{
 			case TouchPhase.Began:
 			{
-				Vector3 screenPoint = this.screen.firstTouchPoint;
-				screenPoint.z       = this.distanceFromScreen;
-
-				Vector3 worldPoint  = Camera.main.ScreenToWorldPoint(screenPoint);
-				this.particleSystem.transform.position = worldPoint;
-
-				this.particleSystem.Play();
+				this.timer = 0;
 				break;
 			}
 
 			case TouchPhase.Moved:
 			{
+				this.timer = 0;
 				this.particleSystem.Stop();
 				break;
 			}
 
 			case TouchPhase.Stationary:
 			{
-				if(this.particleSystem.isPlaying)
-				{
-					// Do nothing.
-				}
-				else
-				{
-					Vector3 screenPoint = this.screen.lastTouchPoint;
-					screenPoint.z       = this.distanceFromScreen;
+				this.timer += Time.deltaTime;
 
-					Vector3 worldPoint  = Camera.main.ScreenToWorldPoint(screenPoint);
-					this.particleSystem.transform.position = worldPoint;
-					this.particleSystem.Play();
+				if(this.timer > this.thresholdSec)
+				{
+					if(this.particleSystem.isPlaying)
+					{
+						// Do nothing.
+					}
+					else
+					{
+						Vector3 screenPoint = this.screen.lastTouchPoint;
+						screenPoint.z       = this.distanceFromScreen;
+						
+						Vector3 worldPoint  = Camera.main.ScreenToWorldPoint(screenPoint);
+						this.particleSystem.transform.position = worldPoint;
+
+						this.particleSystem.Play();
+					}
 				}
 				break;
 			}
