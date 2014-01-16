@@ -60,6 +60,13 @@ public class HoldListener : MonoBehaviour
 			case TouchPhase.Began:
 			{
 				this.timer = 0;
+				Ray ray = Camera.main.ScreenPointToRay(this.screen.firstTouchPoint);
+				RaycastHit hit;
+				if(Physics.Raycast(ray, out hit, 100))
+				{
+					System.Type t = hit.collider.gameObject.GetType();
+					Debug.Log("Hit: " +  t);
+				}
 				break;
 			}
 
