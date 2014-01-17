@@ -1,32 +1,97 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[AddComponentMenu("Scripts/Washi/Challenge 00")]
-public class Challenge00 : MonoBehaviour {
+public class Challenge00 : MonoBehaviour
+{
+	/// <summary>
+	/// The hold listener.
+	/// </summary>
+	public HoldListener holdListener;
 
-	private const int WIDTH = 100;
-	private const int HEIGHT = 90;
+	/// <summary>
+	/// The mesh renderer.
+	/// </summary>
+	MeshRenderer meshRenderer;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+	/// <summary>
+	/// The mesh collider.
+	/// </summary>
+	MeshCollider meshCollider;
 
-	void OnGUI()
+	/// <summary>
+	/// Start this instance.
+	/// </summary>
+	void Start ()
 	{
-		// Make a background box
-		if(GUI.Button(new Rect(Screen.width/2 - WIDTH/2,
-		                       Screen.height/2 - HEIGHT/2,
-		                       WIDTH,
-		                       HEIGHT),
-		              "Touch me!"))
+		// Cache components for convenience.
+		this.meshRenderer = this.renderer as MeshRenderer;
+		this.meshCollider = this.collider as MeshCollider;
+
+		// Add events.
+		if(this.holdListener)
 		{
-			Debug.Log(":-)");
+			this.holdListener.OnHoldBegan    += this.OnHoldBegan;
+			this.holdListener.OnHoldStay     += this.OnHoldStay;
+			this.holdListener.OnHoldCanceled += this.OnHoldCanceled;
+			this.holdListener.OnHoldEnded    += this.OnHoldEnded;
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	/// <summary>
+	/// Update this instance.
+	/// </summary>
+	void Update ()
+	{
+	}
+
+	/// <summary>
+	/// Raises the hold began event.
+	/// </summary>
+	/// <param name="point">Point.</param>
+	void OnHoldBegan(Vector2 point)
+	{
+		Debug.Log("Hold began" + point);
+
+		Ray ray = Camera.main.ScreenPointToRay(point);
+		RaycastHit hitInfo;// unused
+		if(this.meshCollider.Raycast(ray, out hitInfo, float.MaxValue))
+		{
+			this.meshRenderer.material.color = Color.red;
+		}
+	}
+
+	/// <summary>
+	/// Raises the hold stay event.
+	/// </summary>
+	/// <param name="point">Point.</param>
+	void OnHoldStay(Vector2 point)
+	{
+		Debug.Log("Hold stay" + point);
+	}
+
+	/// <summary>
+	/// Raises the hold ended event.
+	/// </summary>
+	/// <param name="point">Point.</param>
+	void OnHoldEnded(Vector2 point)
+	{
+		Debug.Log("Hold ended" + point);
+	}
+
+	/// <summary>
+	/// Raises the hold canceled event.
+	/// </summary>
+	/// <param name="point">Point.</param>
+	void OnHoldCanceled(Vector2 point)
+	{
+		Debug.Log("Hold canceled" + point);
+	}
+
+	/// <summary>
+	/// Raises the GUI event.
+	/// </summary>
+	void OnGUI()
+	{
+
 	}
 }

@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Hold listener delegate.
+/// </summary>
+public delegate void HoldListenerDelegate(Vector2 point);
+
 [RequireComponent(typeof(ParticleSystem))]
 [AddComponentMenu("Scripts/Washi/Hold Listener")]
 public class HoldListener : MonoBehaviour
@@ -40,7 +45,12 @@ public class HoldListener : MonoBehaviour
 		}
 	}
 
-	Collider cachedCollider{get;set;}
+	public event HoldListenerDelegate OnHoldBegan;
+	public event HoldListenerDelegate OnHoldStay;
+	public event HoldListenerDelegate OnHoldEnded;
+	public event HoldListenerDelegate OnHoldCanceled;
+
+	bool isFirstNotification = true;
 	
 	// Update is called once per frame
 	void Update ()
@@ -60,75 +70,36 @@ public class HoldListener : MonoBehaviour
 			switch(this.screen.touchPhase)
 			{
 			case TouchPhase.Began:
-			{
 				this.timer = 0;
-				Ray ray = Camera.main.ScreenPointToRay(this.screen.firstTouchPoint);
-				RaycastHit hit;
-				if(Physics.Raycast(ray, out hit, 100))
-				{
-					this.cachedCollider = hit.collider;
-					Renderer renderer = this.cachedCollider.gameObject.GetComponent<Renderer>();
-					if(renderer)
-					{
-						renderer.material.color = Color.green;
-					}
-				}
+				this.isFirstNotification = true;
 				break;
-			}
 
 			case TouchPhase.Moved:
-			{
-				// Use cached collider.
-				if(this.cachedCollider)
-				{
-					Ray ray = Camera.main.ScreenPointToRay(this.screen.lastTouchPoint);
-					RaycastHit hit;
-					if(this.cachedCollider.Raycast(ray, out hit, 100))
-					{
-						Renderer renderer = this.cachedCollider.gameObject.renderer;
-						if(renderer)
-						{
-							renderer.material.color = Color.blue;
-						}
-					}
-					else
-					{
-						// If there are no hit object, 
-						Renderer renderer = this.cachedCollider.gameObject.renderer;
-						if(renderer)
-						{
-							renderer.material.color = Color.white;
-						}
-						this.cachedCollider = null;
-					}
-				}
-				else
-				{
-					// Find a hit object from all objects in the scene.
-					// This process takes longer than the cached one...
-					Ray ray = Camera.main.ScreenPointToRay(this.screen.lastTouchPoint);
-					RaycastHit hit;
-					if(Physics.Raycast(ray, out hit, 100))
-					{
-						this.cachedCollider = hit.collider;
-						Renderer renderer = this.cachedCollider.gameObject.renderer;
-						if(renderer)
-						{
-							renderer.material.color = Color.green;
-						}
-					}
-				}
 				this.timer = 0;
 				this.particleSystem.Stop();
 				break;
-			}
 
 			case TouchPhase.Stationary:
-			{
 				this.timer += Time.deltaTime;
 
 				if(this.timer > this.thresholdSec)
 				{
+					if(this.isFirstNotification)
+					{
+						if(this.OnHoldBegan != null)
+						{
+							this.OnHoldBegan(this.screen.lastTouchPoint);
+						}
+						this.isFirstNotification = false;
+					}
+					else
+					{
+						if(this.OnHoldStay != null)
+						{
+							this.OnHoldStay(this.screen.lastTouchPoint);
+						}
+					}
+
 					if(this.particleSystem.isPlaying)
 					{
 						// Do nothing.
@@ -142,44 +113,25 @@ public class HoldListener : MonoBehaviour
 						this.particleSystem.transform.position = worldPoint;
 
 						this.particleSystem.Play();
-
-						// Change material color
-						if(this.cachedCollider)
-						{
-							Renderer renderer = this.cachedCollider.gameObject.renderer;
-							if(renderer)
-							{
-								renderer.material.color = Color.red;
-							}
-						}
 					}
 				}
 				break;
-			}
 
 			case TouchPhase.Ended:
-			{
-				if(this.cachedCollider)
+				if(this.OnHoldEnded != null)
 				{
-					Renderer renderer = this.cachedCollider.gameObject.GetComponent<Renderer>();
-					renderer.material.color = Color.white;
+					this.OnHoldEnded(this.screen.lastTouchPoint);
 				}
-
 				this.particleSystem.Stop();
 				break;
-			}
 
 			case TouchPhase.Canceled:
-			{
-				if(this.cachedCollider)
+				if(this.OnHoldCanceled != null)
 				{
-					Renderer renderer = this.cachedCollider.gameObject.GetComponent<Renderer>();
-					renderer.material.color = Color.white;
+					this.OnHoldCanceled(this.screen.lastTouchPoint);
 				}
-
 				this.particleSystem.Stop();
 				break;
-			}
 			}
 		}
 	}
