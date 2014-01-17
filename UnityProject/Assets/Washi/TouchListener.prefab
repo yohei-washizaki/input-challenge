@@ -41,7 +41,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: .00100000005
   startWidth: .00999999978
-  endWidth: .00999999978
+  endWidth: .0500000007
+  distanceFromScreen: 1
 --- !u!120 &12000000
 LineRenderer:
   m_ObjectHideFlags: 1
