@@ -221,7 +221,7 @@ GUIText:
   m_GameObject: {fileID: 444995821}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: Touch me!
+  m_Text: 
   m_Anchor: 1
   m_Alignment: 1
   m_PixelOffset: {x: 0, y: 0}
@@ -229,11 +229,11 @@ GUIText:
   m_TabSize: 4
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Material: {fileID: 0}
-  m_FontSize: 0
+  m_FontSize: 51
   m_FontStyle: 0
   m_Color:
     serializedVersion: 2
-    rgba: 4283979986
+    rgba: 4294704123
   m_PixelCorrect: 1
   m_RichText: 1
 --- !u!4 &444995823
@@ -401,6 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holdListener: {fileID: 1599960584}
   clearTime: 3
+  caption: Touch me!
 --- !u!23 &1358139746
 Renderer:
   m_ObjectHideFlags: 0
@@ -492,6 +493,18 @@ Prefab:
     - target: {fileID: 400000, guid: 4b0c5bc0b6871714380747c6b0f8b525, type: 2}
       propertyPath: m_LocalRotation.w
       value: .707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200000, guid: 4b0c5bc0b6871714380747c6b0f8b525, type: 2}
+      propertyPath: m_FontSize
+      value: 51
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200000, guid: 4b0c5bc0b6871714380747c6b0f8b525, type: 2}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200000, guid: 4b0c5bc0b6871714380747c6b0f8b525, type: 2}
+      propertyPath: m_Color.rgba
+      value: 4294704123
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4b0c5bc0b6871714380747c6b0f8b525, type: 2}

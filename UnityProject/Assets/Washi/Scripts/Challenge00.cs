@@ -41,8 +41,11 @@ public class Challenge00 : MonoBehaviour
 		this.Score = 0;
 
 		this.meshRenderer.material.color = Color.white;
+		this.buttonLabel.text = this.caption;
+		this.buttonLabel.color = Color.black;
 	}
 
+	public string caption = "Touch me!";
 	GUIText buttonLabel;
 
 	/// <summary>
@@ -97,10 +100,13 @@ public class Challenge00 : MonoBehaviour
 				{
 					this.Score = 1.0F;
 					this.meshRenderer.material.color = Color.green;
+					this.buttonLabel.text = string.Format("Score: {0}", this.Score);
 				}
 				else
 				{
 					this.meshRenderer.material.color = Color.yellow;
+					this.buttonLabel.text  = string.Format("Score: {0}", this.Score);
+					this.buttonLabel.color = Color.black;
 				}
 			}
 			else
@@ -127,6 +133,8 @@ public class Challenge00 : MonoBehaviour
 			{
 				this.meshRenderer.material.color = Color.red;
 				this.progress = Progress.InProgress;
+				this.buttonLabel.color = Color.white;
+				this.buttonLabel.text  = "Oh, yeah!";
 			}
 		}
 	}
@@ -194,12 +202,6 @@ public class Challenge00 : MonoBehaviour
 		if(GUI.Button(new Rect(0,0, 100, 30) ,"Retry?"))
 		{
 			reset();
-		}
-
-		if(this.progress == Progress.Finished)
-		{
-			this.buttonLabel.text = string.Format("Score: {0}", this.Score);
-			this.buttonLabel.color = Color.white;
 		}
 	}
 }
