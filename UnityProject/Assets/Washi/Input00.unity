@@ -257,7 +257,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6692f0be2639e98449a0a1e704b1c325, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 19.8419952
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6692f0be2639e98449a0a1e704b1c325, type: 2}
       propertyPath: m_LocalRotation.x
@@ -276,8 +276,8 @@ Prefab:
       value: .707106829
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 6692f0be2639e98449a0a1e704b1c325, type: 2}
-      propertyPath: thresholdSec
-      value: .100000001
+      propertyPath: distanceFromScreen
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6692f0be2639e98449a0a1e704b1c325, type: 2}
@@ -316,6 +316,7 @@ MonoBehaviour:
   threshold: .00100000005
   startWidth: .00999999978
   endWidth: .0500000007
+  distanceFromScreen: 1
 --- !u!4 &633305132
 Transform:
   m_ObjectHideFlags: 0
@@ -418,7 +419,7 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 60
+  field of view: 15
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -451,6 +452,7 @@ GameObject:
   - 33: {fileID: 1124787220}
   - 64: {fileID: 1124787219}
   - 23: {fileID: 1124787218}
+  - 114: {fileID: 1124787222}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -470,7 +472,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 97e9f9ae6bfbb2c40b6b380310bde1e8, type: 2}
+  - {fileID: 2100000, guid: 008133d1701b0c143b72a42813383a46, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -506,10 +508,21 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1124787217}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 5.86999989}
+  m_LocalPosition: {x: 7.45910072, y: 0, z: 55.4741936}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &1124787222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1124787217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14649c09a55f8ab4ebf8b2c245935a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1328726329
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,8 +594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6311aa57910eee1449772a6ab343283a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceFromScreen: 10
-  thresholdSec: .100000001
+  distanceFromScreen: 15
+  thresholdSec: .300000012
 --- !u!199 &1417320453
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -1677,7 +1690,7 @@ Transform:
   m_PrefabInternal: {fileID: 541346420}
   m_GameObject: {fileID: 1417320451}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 19.8419952}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1747,7 +1760,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1845385845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.33494186}
+  m_LocalPosition: {x: -6.25035524, y: 0, z: 38.8789024}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 0}

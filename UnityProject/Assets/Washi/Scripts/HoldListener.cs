@@ -39,6 +39,8 @@ public class HoldListener : MonoBehaviour
 			this.screen = obj.GetComponent<PseudoScreen>();
 		}
 	}
+
+	Collider cachedCollider{get;set;}
 	
 	// Update is called once per frame
 	void Update ()
@@ -64,14 +66,58 @@ public class HoldListener : MonoBehaviour
 				RaycastHit hit;
 				if(Physics.Raycast(ray, out hit, 100))
 				{
-					System.Type t = hit.collider.gameObject.GetType();
-					Debug.Log("Hit: " +  t);
+					this.cachedCollider = hit.collider;
+					Renderer renderer = this.cachedCollider.gameObject.GetComponent<Renderer>();
+					if(renderer)
+					{
+						renderer.material.color = Color.green;
+					}
 				}
 				break;
 			}
 
 			case TouchPhase.Moved:
 			{
+				// Use cached collider.
+				if(this.cachedCollider)
+				{
+					Ray ray = Camera.main.ScreenPointToRay(this.screen.lastTouchPoint);
+					RaycastHit hit;
+					if(this.cachedCollider.Raycast(ray, out hit, 100))
+					{
+						Renderer renderer = this.cachedCollider.gameObject.renderer;
+						if(renderer)
+						{
+							renderer.material.color = Color.blue;
+						}
+					}
+					else
+					{
+						// If there are no hit object, 
+						Renderer renderer = this.cachedCollider.gameObject.renderer;
+						if(renderer)
+						{
+							renderer.material.color = Color.white;
+						}
+						this.cachedCollider = null;
+					}
+				}
+				else
+				{
+					// Find a hit object from all objects in the scene.
+					// This process takes longer than the cached one...
+					Ray ray = Camera.main.ScreenPointToRay(this.screen.lastTouchPoint);
+					RaycastHit hit;
+					if(Physics.Raycast(ray, out hit, 100))
+					{
+						this.cachedCollider = hit.collider;
+						Renderer renderer = this.cachedCollider.gameObject.renderer;
+						if(renderer)
+						{
+							renderer.material.color = Color.green;
+						}
+					}
+				}
 				this.timer = 0;
 				this.particleSystem.Stop();
 				break;
@@ -96,6 +142,16 @@ public class HoldListener : MonoBehaviour
 						this.particleSystem.transform.position = worldPoint;
 
 						this.particleSystem.Play();
+
+						// Change material color
+						if(this.cachedCollider)
+						{
+							Renderer renderer = this.cachedCollider.gameObject.renderer;
+							if(renderer)
+							{
+								renderer.material.color = Color.red;
+							}
+						}
 					}
 				}
 				break;
@@ -103,12 +159,24 @@ public class HoldListener : MonoBehaviour
 
 			case TouchPhase.Ended:
 			{
+				if(this.cachedCollider)
+				{
+					Renderer renderer = this.cachedCollider.gameObject.GetComponent<Renderer>();
+					renderer.material.color = Color.white;
+				}
+
 				this.particleSystem.Stop();
 				break;
 			}
 
 			case TouchPhase.Canceled:
 			{
+				if(this.cachedCollider)
+				{
+					Renderer renderer = this.cachedCollider.gameObject.GetComponent<Renderer>();
+					renderer.material.color = Color.white;
+				}
+
 				this.particleSystem.Stop();
 				break;
 			}

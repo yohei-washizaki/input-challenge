@@ -17,7 +17,7 @@ public class SphireColliderListener : MonoBehaviour {
 	{
 		this.renderer.material.color = Color.green;
 	}
-
+	
 	void OnTriggerStay(Collider other)
 	{
 		this.renderer.material.color = Color.black;
