@@ -47,6 +47,7 @@ public class HoldListener : MonoBehaviour
 
 	public event HoldListenerDelegate OnHoldBegan;
 	public event HoldListenerDelegate OnHoldStay;
+	public event HoldListenerDelegate OnHoldMoved;
 	public event HoldListenerDelegate OnHoldEnded;
 	public event HoldListenerDelegate OnHoldCanceled;
 
@@ -77,6 +78,12 @@ public class HoldListener : MonoBehaviour
 			case TouchPhase.Moved:
 				this.timer = 0;
 				this.particleSystem.Stop();
+				
+				if(this.OnHoldMoved != null)
+				{
+					this.OnHoldMoved(this.screen.lastTouchPoint);
+				}
+
 				break;
 
 			case TouchPhase.Stationary:
