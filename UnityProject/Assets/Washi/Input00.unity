@@ -393,6 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdListener: {fileID: 1599960584}
+  clearTime: 3
 --- !u!23 &1358139746
 Renderer:
   m_ObjectHideFlags: 0

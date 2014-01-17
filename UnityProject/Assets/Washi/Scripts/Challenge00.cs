@@ -18,6 +18,33 @@ public class Challenge00 : MonoBehaviour
 	/// </summary>
 	MeshCollider meshCollider;
 
+	public float clearTime = 3.0F;
+	float timer;
+	public float Score{get;set;}
+
+	enum Progress
+	{
+		NotStarted,
+		InProgress,
+		Finished
+	}
+
+	Progress progress;
+
+	void reset()
+	{
+		this.progress = Progress.NotStarted;
+		
+		this.timer = 0;
+		
+		// Reset score
+		this.Score = 0;
+
+		this.meshRenderer.material.color = Color.white;
+	}
+
+	GUIText buttonLabel;
+
 	/// <summary>
 	/// Start this instance.
 	/// </summary>
@@ -26,6 +53,10 @@ public class Challenge00 : MonoBehaviour
 		// Cache components for convenience.
 		this.meshRenderer = this.renderer as MeshRenderer;
 		this.meshCollider = this.collider as MeshCollider;
+
+		this.buttonLabel = GetComponentInChildren<GUIText>();
+
+		this.reset();
 
 		// Add events.
 		if(this.holdListener)
@@ -43,6 +74,41 @@ public class Challenge00 : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
+		switch(this.progress)
+		{
+		case Progress.NotStarted:
+			// Waiting for start.
+			break;
+
+		case Progress.InProgress:
+			this.timer += Time.deltaTime;
+			if(this.timer > this.clearTime)
+			{
+				this.progress = Progress.Finished;
+			}
+			break;
+
+		case Progress.Finished:
+			// Evaluate score.
+			if(this.timer > 0)
+			{
+				this.Score = this.timer / this.clearTime;
+				if(this.Score >= 1.0F)
+				{
+					this.Score = 1.0F;
+					this.meshRenderer.material.color = Color.green;
+				}
+				else
+				{
+					this.meshRenderer.material.color = Color.yellow;
+				}
+			}
+			else
+			{
+				this.Score = 0;
+			}
+			break;
+		}
 	}
 
 	/// <summary>
@@ -51,11 +117,17 @@ public class Challenge00 : MonoBehaviour
 	/// <param name="point">Point.</param>
 	void OnHoldBegan(Vector2 point)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(point);
-		RaycastHit hit;
-		if(this.meshCollider.Raycast(ray, out hit, float.MaxValue))
+		if(this.progress == Progress.NotStarted)
 		{
-			this.meshRenderer.material.color = Color.red;
+			this.timer = 0;
+
+			Ray ray = Camera.main.ScreenPointToRay(point);
+			RaycastHit hit;
+			if(this.meshCollider.Raycast(ray, out hit, float.MaxValue))
+			{
+				this.meshRenderer.material.color = Color.red;
+				this.progress = Progress.InProgress;
+			}
 		}
 	}
 
@@ -65,7 +137,6 @@ public class Challenge00 : MonoBehaviour
 	/// <param name="point">Point.</param>
 	void OnHoldStay(Vector2 point)
 	{
-		Debug.Log("Hold stay" + point);
 	}
 
 	/// <summary>
@@ -78,21 +149,29 @@ public class Challenge00 : MonoBehaviour
 		RaycastHit hit;
 		if(this.meshCollider.Raycast(ray, out hit, float.MaxValue))
 		{
-			this.meshRenderer.material.color = Color.red;
+			// Moved into inside
+			// Nothing to do.
 		}
 		else
 		{
-			this.meshRenderer.material.color = Color.white;
+			// Moved to outside => Challenge failed.
+			if(this.progress == Progress.InProgress)
+			{
+				this.progress = Progress.Finished;
+			}
 		}
 	}
-
+	
 	/// <summary>
 	/// Raises the hold ended event.
 	/// </summary>
 	/// <param name="point">Point.</param>
 	void OnHoldEnded(Vector2 point)
 	{
-		this.meshRenderer.material.color = Color.white;
+		if(this.progress == Progress.InProgress)
+		{
+			this.progress = Progress.Finished;
+		}
 	}
 
 	/// <summary>
@@ -101,7 +180,10 @@ public class Challenge00 : MonoBehaviour
 	/// <param name="point">Point.</param>
 	void OnHoldCanceled(Vector2 point)
 	{
-		this.meshRenderer.material.color = Color.white;
+		if(this.progress == Progress.InProgress)
+		{
+			this.progress = Progress.Finished;
+		}
 	}
 
 	/// <summary>
@@ -109,6 +191,15 @@ public class Challenge00 : MonoBehaviour
 	/// </summary>
 	void OnGUI()
 	{
+		if(GUI.Button(new Rect(0,0, 100, 30) ,"Retry?"))
+		{
+			reset();
+		}
 
+		if(this.progress == Progress.Finished)
+		{
+			this.buttonLabel.text = string.Format("Score: {0}", this.Score);
+			this.buttonLabel.color = Color.white;
+		}
 	}
 }
