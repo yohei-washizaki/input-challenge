@@ -132,6 +132,9 @@ public class PseudoScreen : MonoBehaviour
 		}
 
 		this.previousTouchPoint = this.lastTouchPoint;
+
+#if UNITY_STANDALONE
+		// Windows codes here.
 		this.lastTouchPoint     = Input.mousePosition;
 		
 		// Handle state
@@ -183,8 +186,10 @@ public class PseudoScreen : MonoBehaviour
 				}
 			}
 		}
-
-		// Go through this path only on mobile devices.
+#else
+		// iOS codes here.
+		// TODO: Change state of this instance when each event comes.
+		// TODO: Handle multiple events properly if needed.
 		foreach(UnityEngine.Touch touch in Input.touches)
 		{
 			switch(touch.phase)
@@ -206,5 +211,6 @@ public class PseudoScreen : MonoBehaviour
 				break;
 			}
 		}
+#endif
 	}
 }
