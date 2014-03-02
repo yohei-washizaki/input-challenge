@@ -4,8 +4,8 @@ using System.Collections;
 [AddComponentMenu("Scripts/Washi/PseudoScreen")]
 public class PseudoScreen : MonoBehaviour
 {
-	int width{get;set;}
-	int height{get;set;}
+	int width;
+	int height;
 
 	public bool _isActive = true;
 	public bool isActive
@@ -61,7 +61,7 @@ public class PseudoScreen : MonoBehaviour
 	/// Gets or sets the state of the touch.
 	/// </summary>
 	/// <value>The state of the touch.</value>
-	TouchState touchState{get;set;}
+	TouchState touchState;
 
 	/// <summary>
 	/// Gets the touch phase.
